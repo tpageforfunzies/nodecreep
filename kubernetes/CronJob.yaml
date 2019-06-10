@@ -1,0 +1,38 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: nodecreep
+  labels:
+    app: nodecreep
+spec:
+  # only do one at a time
+  concurrencyPolicy: "Forbid"
+  # every hour at 00 minute
+  schedule: "0 */1 * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            cron-part: "true"
+        spec:
+          containers:
+          - name: nodecreep
+            image: tpageforfunzies/nodecreep:armhf
+            imagePullPolicy: Always
+            env:
+            - name: SLACK_WEBHOOK
+              value: "INSERT FULL SLACK WEBHOOK URL HERE"
+            - name: FOOTER_ICON
+              value: "https://bouldertrackerpics.s3.us-east-2.amazonaws.com/spaghetti-tron.png"
+            - name: SLACK_USERNAME
+              value: "INSERT YOUR SLACK INTEGRATIONS USERNAME"
+            volumeMounts:
+            - name: kubeconfig
+              mountPath: ./kubeconfig
+              subPath: kubeconfig
+          volumes:
+          - name: kubeconfig
+            configMap:
+              name: nodecreep-configmap
+          restartPolicy: Never
