@@ -10,7 +10,9 @@ every hour it spins up, starts, and stops a pod that queries the core api and ge
 ![nodecreep-message](https://bouldertrackerpics.s3.us-east-2.amazonaws.com/Screen+Shot+2019-06-09+at+9.15.55+PM.png)
 ###### made to be super easy to deploy onto raspberry pi kubernetes cluster
 just apply the yamls and use [my armhf docker image](https://hub.docker.com/r/tpageforfunzies/nodecreep)
-that runs the `nodecreep/creep.py` script from this repo, in a docker container buit from the `Dockerfile` in this repo.
+that runs the `nodecreep/creep.py` script from this repo, in a docker container buit from the `Dockerfile` in this repo
+
+---
 # - set up
 ###### 1.  add kubeconfig to configmap for mounting
 ```
@@ -47,13 +49,14 @@ env:
 - name: SLACK_USERNAME
   value: "INSERT YOUR SLACK INTEGRATIONS USERNAME"
 ```
-  now you're ready to deploy which is shown below
-  <br>
-  # deploy
-  make sure you've updated the values in the 2 yaml files shown above and it just comes down to applying them both, the configmap then the cronjob
-  ###### 1.  run the deploy script
-  run `scripts/deploy.sh`
-  ```
+now you're ready to deploy which is shown below
+
+---
+# - deploy
+make sure you've updated the values in the 2 yaml files shown above and it just comes down to applying them both, the configmap then the cronjob
+###### 1.  run the deploy script
+run `scripts/deploy.sh`
+```
 ============================================
 ===     youre using nodecreep? sick.     ===
 ===  make sure you updated all the vars  ===
@@ -76,7 +79,7 @@ NAMESPACE   NAME                      SCHEDULE      SUSPEND   ACTIVE   LAST SCHE
 default     cronjob.batch/nodecreep   0 */1 * * *   False     0        22m             123m
 ```
 
-
+---
 ###### a small aside
 the [kubernetes ttl controller that will eventually clean up after this process](https://kubernetes.io/docs/concepts/workloads/controllers/ttlafterfinished/) is only in alpha and currently featuregated.  
 <br>
